@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,25 +10,91 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
       :root {
-        --primary-red: #d10000;
-        --primary-black: #0a0a0a;
-        --secondary-red: #8a0000;
-        --secondary-black: #1a1a1a;
+        --primary-dark: #4a1d96;
+        --primary-light: #8b5cf6;
+        --secondary-dark: #1e293b;
+        --secondary-light: #f1f5f9;
       }
 
       body {
-        font-family: "Oswald", sans-serif;
-        background-color: var(--primary-black);
-        color: white;
-        overflow-x: hidden;
+        font-family: "Poppins", sans-serif;
+        transition: background-color 0.3s, color 0.3s;
       }
 
-      .title-font {
-        font-family: "Bebas Neue", cursive;
-        letter-spacing: 1px;
+      .dark {
+        background-color: #0f172a;
+        color: white;
+      }
+
+      .light {
+        background-color: #f8fafc;
+        color: #1e293b;
+      }
+
+      .card-hover {
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .fade-in {
+        animation: fadeIn 0.5s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal {
+        transition: opacity 0.3s ease;
+      }
+
+      .modal-content {
+        transition: transform 0.3s ease;
+      }
+
+      .modal.active {
+        opacity: 1;
+        pointer-events: all;
+      }
+
+      .modal.active .modal-content {
+        transform: translateY(0);
+      }
+
+      .section {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s, transform 0.6s;
+      }
+
+      .section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .player-card {
+        perspective: 1000px;
+      }
+
+      .player-card-inner {
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+      }
+
+      .player-card:hover .player-card-inner {
+        transform: rotateY(10deg);
       }
 
       .nav-link {
@@ -42,418 +108,272 @@
         height: 2px;
         bottom: -2px;
         left: 0;
-        background-color: var(--primary-red);
-        transition: width 0.3s ease;
+        background-color: var(--primary-light);
+        transition: width 0.3s;
       }
 
       .nav-link:hover::after {
         width: 100%;
       }
 
-      .player-card {
-        transition: all 0.3s ease;
-        transform: translateY(0);
-        animation: fadeInUp 0.6s forwards;
-        background: linear-gradient(145deg, #1a1a1a, #0a0a0a);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        border-left: 3px solid var(--primary-red);
+      .nav-link.active::after {
+        width: 100%;
       }
 
-      .player-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(209, 0, 0, 0.3);
-      }
-      .player-image {
-        transition: all 0.4s ease;
-        filter: grayscale(20%);
+      .toggle-checkbox:checked {
+        right: 0;
+        background-color: var(--primary-light);
       }
 
-      .player-card:hover .player-image {
-        filter: grayscale(0%);
-        transform: scale(1.05);
-      }
-
-      .jersey-number {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: var(--primary-red);
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 1.2rem;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        transform: scale(0);
-        transition: transform 0.3s ease;
-      }
-
-      .player-card:hover .jersey-number {
-        transform: scale(1);
-      }
-
-      .player-role {
-        background-color: rgba(209, 0, 0, 0.2);
-        padding: 3px 8px;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        display: inline-block;
-        transition: all 0.3s ease;
-      }
-
-      .player-card:hover .player-role {
-        background-color: rgba(209, 0, 0, 0.4);
-      }
-      .stat-icon {
-        width: 24px;
-        height: 24px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 8px;
-        color: var(--primary-red);
-      }
-
-      .page-transition {
-        animation: fadeIn 0.5s ease forwards;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .header-image {
-        background-image: linear-gradient(
-            rgba(0, 0, 0, 0.7),
-            rgba(0, 0, 0, 0.7)
-          ),
-          url("https://images.unsplash.com/photo-1531415074968-036ba1b575da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80");
-        background-size: cover;
-        background-position: center;
-        height: 60vh;
-      }
-
-      .stats-bar {
-        height: 8px;
-        background-color: #333;
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
-      }
-
-      .stats-progress {
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          var(--secondary-red),
-          var(--primary-red)
-        );
-        transition: width 1s ease 0.3s;
-        width: 0;
-      }
-
-      input,
-      textarea,
-      select {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid #333;
-        color: white;
-        transition: all 0.3s ease;
-      }
-
-      input:focus,
-      textarea:focus,
-      select:focus {
-        outline: none;
-        border-color: var(--primary-red);
-        box-shadow: 0 0 0 2px rgba(209, 0, 0, 0.3);
-      }
-
-      .btn-primary {
-        background-color: var(--primary-red);
-        transition: all 0.3s ease;
-      }
-
-      .btn-primary:hover {
-        background-color: var(--secondary-red);
-        transform: translateY(-2px);
-      }
-
-      .highlight-video {
-        transition: all 0.3s ease;
-      }
-
-      .highlight-video:hover {
-        transform: scale(1.03);
-        box-shadow: 0 10px 20px rgba(209, 0, 0, 0.3);
-      }
-
-      .cricket-ball {
-        animation: spin 2s linear infinite;
-      }
-
-      @keyframes spin {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
+      .toggle-checkbox:checked + .toggle-label {
+        background-color: var(--primary-dark);
       }
     </style>
   </head>
-  <body>
-    <!-- Navigation -->
-    <nav class="bg-black py-4 px-6 sticky top-0 z-50 shadow-lg">
-      <div class="container mx-auto flex justify-between items-center">
-        <div class="flex items-center">
-          <div
-            class="cricket-ball w-8 h-8 rounded-full bg-red-600 flex items-center justify-center mr-3"
-          >
-            <div class="w-2 h-2 bg-white rounded-full"></div>
+  <body class="dark min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-purple-900 dark:bg-gray-900 sticky top-0 z-50 shadow-lg">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-cricket text-white text-2xl"></i>
+            <a href="#" class="text-white font-bold text-xl md:text-2xl"
+              >SPARTAN BOYZ</a
+            >
           </div>
-          <h1 class="title-font text-3xl text-red-600">SPARTAN BOYZ</h1>
+
+          <div class="hidden md:flex items-center space-x-6">
+            <a
+              href="#home"
+              class="nav-link text-white hover:text-purple-300 active"
+              >Home</a
+            >
+            <a href="#stats" class="nav-link text-white hover:text-purple-300"
+              >Player Stats</a
+            >
+            <a href="#join" class="nav-link text-white hover:text-purple-300"
+              >Join Our Team</a
+            >
+            <a href="#about" class="nav-link text-white hover:text-purple-300"
+              >About</a
+            >
+            <a href="#contact" class="nav-link text-white hover:text-purple-300"
+              >Contact Us</a
+            >
+
+            <!-- Dark/Light Mode Toggle -->
+            <div class="flex items-center ml-4">
+              <span class="mr-2 text-sm text-white">Dark</span>
+              <div
+                class="relative inline-block w-12 mr-2 align-middle select-none"
+              >
+                <input
+                  type="checkbox"
+                  id="toggle"
+                  class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                />
+                <label
+                  for="toggle"
+                  class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+                ></label>
+              </div>
+              <span class="text-sm text-white">Light</span>
+            </div>
+          </div>
+
+          <!-- Mobile menu button -->
+          <div class="md:hidden flex items-center">
+            <button
+              id="mobile-menu-button"
+              class="text-white focus:outline-none"
+            >
+              <i class="fas fa-bars text-2xl"></i>
+            </button>
+          </div>
         </div>
-        <div class="hidden md:flex space-x-8">
-          <a
-            href="#"
-            class="nav-link text-white hover:text-red-500"
-            onclick="showPage('home')"
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+          <a href="#home" class="block py-2 text-white hover:text-purple-300"
             >Home</a
           >
-          <a
-            href="#"
-            class="nav-link text-white hover:text-red-500"
-            onclick="showPage('stats')"
-            >Players Stats</a
+          <a href="#stats" class="block py-2 text-white hover:text-purple-300"
+            >Player Stats</a
           >
-          <a
-            href="#"
-            class="nav-link text-white hover:text-red-500"
-            onclick="showPage('join')"
+          <a href="#join" class="block py-2 text-white hover:text-purple-300"
             >Join Our Team</a
           >
-          <a
-            href="#"
-            class="nav-link text-white hover:text-red-500"
-            onclick="showPage('about')"
+          <a href="#about" class="block py-2 text-white hover:text-purple-300"
             >About</a
           >
-          <a
-            href="#"
-            class="nav-link text-white hover:text-red-500"
-            onclick="showPage('contact')"
+          <a href="#contact" class="block py-2 text-white hover:text-purple-300"
             >Contact Us</a
           >
+
+          <div class="flex items-center mt-4">
+            <span class="mr-2 text-sm text-white">Dark</span>
+            <div
+              class="relative inline-block w-12 mr-2 align-middle select-none"
+            >
+              <input
+                type="checkbox"
+                id="toggle-mobile"
+                class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+              />
+              <label
+                for="toggle-mobile"
+                class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+              ></label>
+            </div>
+            <span class="text-sm text-white">Light</span>
+          </div>
         </div>
-        <button
-          class="md:hidden text-white focus:outline-none"
-          id="mobile-menu-button"
-        >
-          <i class="fas fa-bars text-2xl"></i>
-        </button>
-      </div>
-      <!-- Mobile Menu -->
-      <div
-        class="md:hidden hidden bg-black absolute w-full left-0 px-6 py-2"
-        id="mobile-menu"
-      >
-        <a
-          href="#"
-          class="block py-2 text-white hover:text-red-500"
-          onclick="showPage('home')"
-          >Home</a
-        >
-        <a
-          href="#"
-          class="block py-2 text-white hover:text-red-500"
-          onclick="showPage('stats')"
-          >Players Stats</a
-        >
-        <a
-          href="#"
-          class="block py-2 text-white hover:text-red-500"
-          onclick="showPage('join')"
-          >Join Our Team</a
-        >
-        <a
-          href="#"
-          class="block py-2 text-white hover:text-red-500"
-          onclick="showPage('about')"
-          >About</a
-        >
-        <a
-          href="#"
-          class="block py-2 text-white hover:text-red-500"
-          onclick="showPage('contact')"
-          >Contact Us</a
-        >
       </div>
     </nav>
 
-    <!-- Page Content -->
-    <div class="min-h-screen">
+    <!-- Main Content -->
+    <main class="flex-grow">
       <!-- Home Page -->
-      <div id="home-page" class="page-transition">
-        <!-- Header Image -->
-        <div class="header-image flex items-center justify-center">
-          <div class="text-center">
-            <h2 class="title-font text-5xl md:text-7xl text-red-600 mb-4">
-              SPARTAN BOYZ
-            </h2>
-            <p class="text-xl md:text-2xl max-w-3xl mx-auto">
-              Where Passion Meets Performance
-            </p>
+      <section id="home" class="section">
+        <!-- Hero Section -->
+        <div class="relative">
+          <img
+            src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80"
+            alt="Spartan Boyz Cricket Team"
+            class="w-full h-64 md:h-96 object-cover brightness-75"
+          />
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center px-4">
+              <h1 class="text-3xl md:text-5xl font-bold text-white mb-4">
+                SPARTAN BOYZ
+              </h1>
+              <p class="text-lg md:text-xl text-white">
+                Where Passion Meets Performance
+              </p>
+            </div>
           </div>
         </div>
 
         <!-- Top Players Section -->
-        <div class="container mx-auto py-16 px-4">
-          <h2 class="title-font text-4xl text-center text-red-600 mb-12">
-            TOP PLAYERS
+        <div class="container mx-auto px-4 py-12">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 dark:text-white light:text-gray-800"
+          >
+            OUR TOP PLAYERS
           </h2>
+
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Player 1 -->
-            <div
-              class="player-card bg-gray-900 rounded-lg overflow-hidden shadow-lg"
-            >
-              <div class="relative">
-                <img
-                  src="./Assets/Barry.jpg"
-                  alt="Player 1"
-                  class="w-full h-64 object-cover"
-                />
-                <div
-                  class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
-                >
-                  <h3 class="title-font text-2xl text-red-600">Barry</h3>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Batting Average</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 75%"></div>
+            <div class="player-card">
+              <div
+                class="player-card-inner bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg card-hover"
+              >
+                <div class="relative">
+                  <img
+                    src="./Assets/Barry.jpg"
+                    alt="Player 1"
+                    class="w-full h-64 object-cover"
+                  />
+                  <div
+                    class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
+                  >
+                    <h3 class="text-xl font-bold text-white">Barry</h3>
+                    <p class="text-purple-300">All Rounder</p>
                   </div>
-                  <span class="text-sm text-gray-400">47.0</span>
                 </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Strike Rate</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 90%"></div>
+                <div class="p-4">
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300"
+                      >Matches</span
+                    >
+                    <span class="font-bold">142</span>
                   </div>
-                  <span class="text-sm text-gray-400">221.0</span>
-                </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Wickets</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 70%"></div>
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300">Runs</span>
+                    <span class="font-bold">5,678</span>
                   </div>
-                  <span class="text-sm text-gray-400">33 in 22 Innings</span>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                  <span class="text-gray-400">Role: All Rounder</span>
-                  <span class="text-red-600 font-bold">Ranking #2</span>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-300">Avg</span>
+                    <span class="font-bold">42.5</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Player 2 -->
-            <div
-              class="player-card bg-gray-900 rounded-lg overflow-hidden shadow-lg"
-            >
-              <div class="relative">
-                <img
-                  src="./Assets/Hussnain.jpg"
-                  alt="Player 2"
-                  class="w-full h-64 object-cover"
-                />
-                <div
-                  class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
-                >
-                  <h3 class="title-font text-2xl text-red-600">Hussnain</h3>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Batting Average</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 90%"></div>
+            <div class="player-card">
+              <div
+                class="player-card-inner bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg card-hover"
+              >
+                <div class="relative">
+                  <img
+                    src="./Assets/Hussnain.jpg"
+                    alt="Player 2"
+                    class="w-full h-64 object-cover"
+                  />
+                  <div
+                    class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
+                  >
+                    <h3 class="text-xl font-bold text-white">Hussnain</h3>
+                    <p class="text-purple-300">Opening Batsman</p>
                   </div>
-                  <span class="text-sm text-gray-400">69.5</span>
                 </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Strike Rate</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 95%"></div>
+                <div class="p-4">
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300"
+                      >Matches</span
+                    >
+                    <span class="font-bold">178</span>
                   </div>
-                  <span class="text-sm text-gray-400">259.0</span>
-                </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Sixes</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 95%"></div>
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300"
+                      >Wickets</span
+                    >
+                    <span class="font-bold">634</span>
                   </div>
-                  <span class="text-sm text-gray-400">122 in 20 innings</span>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                  <span class="text-gray-400">Role: Opener Batsman</span>
-                  <span class="text-red-600 font-bold">Ranking #1</span>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-300">Avg</span>
+                    <span class="font-bold">26.2</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             <!-- Player 3 -->
-            <div
-              class="player-card bg-gray-900 rounded-lg overflow-hidden shadow-lg"
-            >
-              <div class="relative">
-                <img
-                  src="./Assets/Hammad.jpg"
-                  alt="Player 3"
-                  class="w-full h-64 object-cover"
-                />
-                <div
-                  class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
-                >
-                  <h3 class="title-font text-2xl text-red-600">Hammad (C)</h3>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Batting Average</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 70%"></div>
+            <div class="player-card">
+              <div
+                class="player-card-inner bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg card-hover"
+              >
+                <div class="relative">
+                  <img
+                    src="./Assets/Hammad.jpg"
+                    alt="Player 3"
+                    class="w-full h-64 object-cover"
+                  />
+                  <div
+                    class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4"
+                  >
+                    <h3 class="text-xl font-bold text-white">Hammad (C)</h3>
+                    <p class="text-purple-300">All Rounder</p>
                   </div>
-                  <span class="text-sm text-gray-400">30.5</span>
                 </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Strike Rate</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 80%"></div>
+                <div class="p-4">
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300"
+                      >Matches</span
+                    >
+                    <span class="font-bold">165</span>
                   </div>
-                  <span class="text-sm text-gray-400">188.1</span>
-                </div>
-                <div class="mb-4">
-                  <p class="text-gray-400 mb-1">Wickets</p>
-                  <div class="stats-bar">
-                    <div class="stats-progress" style="width: 90%"></div>
+                  <div class="flex justify-between mb-2">
+                    <span class="text-gray-600 dark:text-gray-300">Runs</span>
+                    <span class="font-bold">4,892</span>
                   </div>
-                  <span class="text-sm text-gray-400">37 in 25 Innings</span>
-                </div>
-                <div class="flex justify-between items-center mt-6">
-                  <span class="text-gray-400">Role: All-Rounder</span>
-                  <span class="text-red-600 font-bold">Ranking #3</span>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-300"
+                      >Wickets</span
+                    >
+                    <span class="font-bold">194</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -461,1167 +381,169 @@
         </div>
 
         <!-- Team Description -->
-        <div class="bg-gray-900 py-16">
+        <div class="bg-purple-900 dark:bg-gray-900 py-12">
           <div class="container mx-auto px-4">
-            <h2 class="title-font text-4xl text-center text-red-600 mb-12">
-              WHO WE ARE
+            <h2
+              class="text-2xl md:text-3xl font-bold text-center mb-8 text-white"
+            >
+              ABOUT SPARTAN BOYZ
             </h2>
-            <div class="max-w-4xl mx-auto text-center">
-              <p class="text-lg mb-6">
-                Spartan Boyz Cricket Team is a premier cricket club founded in
-                2017 with a vision to nurture talent and compete at the highest
-                levels. We represent the spirit of cricket with passion,
-                discipline, and sportsmanship.
+            <div class="max-w-4xl mx-auto text-white text-center">
+              <p class="mb-4">
+                Spartan Boyz is a premier cricket team founded in 2017 with a
+                vision to dominate the cricketing world with skill, discipline,
+                and warrior spirit. Our team represents the perfect blend of
+                youth and experience, with players who have proven their mettle
+                in various domestic and international tournaments.
               </p>
-              <p class="text-lg mb-6">
-                Our team consists of dedicated players who train rigorously to
-                excel in all formats of the game. From explosive batsmen to
-                lethal bowlers and agile fielders, we have a complete squad
-                ready to take on any challenge.
+              <p class="mb-4">
+                We believe in playing hard but fair cricket, where every player
+                gives their 100% on the field. Our motto "Unleash the Warrior
+                Within" reflects our approach to the game - fearless,
+                aggressive, and always striving for excellence.
               </p>
-              <p class="text-lg">
-                Beyond the boundary ropes, we're a family that supports each
-                other on and off the field. Our motto "Strength in Unity"
-                reflects our belief that teamwork and camaraderie are as
-                important as individual skills in achieving success.
+              <p>
+                With multiple tournament wins under our belt and a growing fan
+                base, Spartan Boyz is more than just a cricket team - it's a
+                movement that inspires young cricketers to dream big and work
+                hard to achieve those dreams.
               </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Player Stats Page -->
-      <div id="stats-page" class="page-transition hidden">
-        <div class="container mx-auto py-16 px-4">
-          <div class="text-center mb-16">
-            <h2 class="title-font text-5xl text-red-600 mb-4">
-              PLAYER STATISTICS
-            </h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">
-              Meet the warriors who dominate the cricket field. Hover over cards
-              to see detailed stats.
-            </p>
-          </div>
+      <section id="stats" class="section py-12 hidden">
+        <div class="container mx-auto px-4">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 dark:text-white light:text-gray-800"
+          >
+            PLAYER STATISTICS
+          </h2>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Player 1 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-1">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src="./Assets/Hammad.jpg"
-                  alt="Player 1"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">16</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Hammad (C)</h3>
-                  <span class="player-role text-red-400">All Rounder</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">30.5</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">188.1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">93</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">39/24</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">20</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/3</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">37</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">457</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 2 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-2">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src="./Assets/Barry.jpg"
-                  alt="Player 2"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">96</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Barry</h3>
-                  <span class="player-role text-red-400">All Rounder</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">47.0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">221.0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">222</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">27/76</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">21</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">2/1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">31</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">705</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 3 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-3">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src="./Assets/Hussnain.jpg"
-                  alt="Player 3"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">10</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Hussnain</h3>
-                  <span class="player-role text-red-400">Opening Batsman</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">69.4</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">259.0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">145</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">39/122</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">20</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">5/1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">2</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">1,041</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 4 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-4">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 4"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">9</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Uzair</h3>
-                  <span class="player-role text-red-400">Middle Order</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">25.1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">143.1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">79</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">18/25</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">18</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/3</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">14</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">402</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 5 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-5">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src="./Assets/Berry.jpg"
-                  alt="Player 5"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">11</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Berry</h3>
-                  <span class="player-role text-red-400">Spin Bowler</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">14.8</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">134.1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">31</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">2/13</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">22</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">33</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">118</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 6 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-6">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 6"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">8</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Ahmed</h3>
-                  <span class="player-role text-red-400">Top Order</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">74.7</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">232.4</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">123</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">23/52</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">8</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">2/4</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">13</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">523</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 7 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-7">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src="./Assets/Umar.jpg"
-                  alt="Player 7"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">3</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Umer</h3>
-                  <span class="player-role text-red-400">Fast Bowler</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">19.0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">143.4</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">34</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">6/7</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">14</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">12</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">76</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 8 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-8">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 8"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">4</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Numan</h3>
-                  <span class="player-role text-red-400">Fast Bowler</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">10.3</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">124.2</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">36</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">8/5</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">16</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">12</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">113</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 9 -->
-            <div class="player-card rounded-lg overflow-hidden animate-delay-9">
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 9"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">6</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Azaan</h3>
-                  <span class="player-role text-red-400">Opening Batsman</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">22.0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">123.9</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">42</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">17/15</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">16</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">0</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">264</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 10 -->
-            <div
-              class="player-card rounded-lg overflow-hidden animate-delay-10"
-            >
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 10"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">1</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Rana Saeed</h3>
-                  <span class="player-role text-red-400">Fast Bowler</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">22.6</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">205.3</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">64</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">10/32</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">18</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/1</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">17</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">271</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Player 11 -->
-            <div
-              class="player-card rounded-lg overflow-hidden animate-delay-11"
-            >
-              <div class="relative overflow-hidden h-64">
-                <img
-                  src=""
-                  alt="Player 11"
-                  class="player-image w-full h-full object-cover"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black to-transparent"
-                ></div>
-                <div class="jersey-number">2</div>
-                <div class="absolute bottom-0 left-0 p-4">
-                  <h3 class="title-font text-2xl text-red-600">Saif</h3>
-                  <span class="player-role text-red-400">Middle Order</span>
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="grid grid-cols-2 gap-4">
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Batting Avg</div>
-                      <div class="text-red-500 font-bold">26.8</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Strike Rate</div>
-                      <div class="text-red-500 font-bold">212.7</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-trophy"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Highest Score</div>
-                      <div class="text-red-500 font-bold">65</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-border-all"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">4s/6s</div>
-                      <div class="text-red-500 font-bold">10/27</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Matches</div>
-                      <div class="text-red-500 font-bold">14</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-star"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">100s/50s</div>
-                      <div class="text-red-500 font-bold">0/2</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon">
-                      <i class="fas fa-baseball-ball"></i>
-                    </div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Wickets</div>
-                      <div class="text-red-500 font-bold">3</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center">
-                    <div class="stat-icon"><i class="fas fa-running"></i></div>
-                    <div>
-                      <div class="text-gray-400 text-sm">Total Runs</div>
-                      <div class="text-red-500 font-bold">268</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Player cards will be generated here -->
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Join Our Team Page -->
-      <div id="join-page" class="page-transition hidden">
-        <div class="container mx-auto py-16 px-4 max-w-4xl">
-          <h2 class="title-font text-4xl text-center text-red-600 mb-12">
+      <section id="join" class="section py-12 hidden">
+        <div class="container mx-auto px-4">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 dark:text-white light:text-gray-800"
+          >
             JOIN OUR TEAM
           </h2>
-          <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-            <form id="join-form">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label for="name" class="block text-gray-400 mb-2"
-                    >Full Name</label
-                  >
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="age" class="block text-gray-400 mb-2">Age</label>
-                  <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    min="16"
-                    max="40"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  />
-                </div>
-                <div>
-                  <label for="role" class="block text-gray-400 mb-2"
-                    >Primary Role</label
-                  >
-                  <select
-                    id="role"
-                    name="role"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  >
-                    <option
-                      style="background-color: black; color: red"
-                      value=""
-                    >
-                      Select Role
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="Opening Batsman"
-                    >
-                      Opening Batsman
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="Middle Order Batsman"
-                    >
-                      Middle Order Batsman
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="Fast Bowler"
-                    >
-                      Fast Bowler
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="Spin Bowler"
-                    >
-                      Spin Bowler
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="All-Rounder"
-                    >
-                      All-Rounder
-                    </option>
-                    <option
-                      style="background-color: black; color: red"
-                      value="Wicketkeeper"
-                    >
-                      Wicketkeeper
-                    </option>
-                  </select>
-                </div>
-                <div>
-                  <label for="experience" class="block text-gray-400 mb-2"
-                    >Years of Experience</label
-                  >
-                  <input
-                    type="number"
-                    id="experience"
-                    name="experience"
-                    min="0"
-                    max="30"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  />
-                </div>
-                <div class="md:col-span-2">
-                  <label for="email" class="block text-gray-400 mb-2"
-                    >Email</label
-                  >
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  />
-                </div>
-                <div class="md:col-span-2">
-                  <label for="phone" class="block text-gray-400 mb-2"
-                    >Phone Number</label
-                  >
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  />
-                </div>
-                <div class="md:col-span-2">
-                  <label for="achievements" class="block text-gray-400 mb-2"
-                    >Cricket Achievements</label
-                  >
-                  <textarea
-                    id="achievements"
-                    name="achievements"
-                    rows="3"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    placeholder="List any notable performances, records, or tournaments you've participated in"
-                  ></textarea>
-                </div>
-                <div class="md:col-span-2">
-                  <label for="why" class="block text-gray-400 mb-2"
-                    >Why do you want to join Spartan Boyz?</label
-                  >
-                  <textarea
-                    id="why"
-                    name="why"
-                    rows="3"
-                    class="w-full px-4 py-2 rounded focus:outline-none"
-                    required
-                  ></textarea>
-                </div>
+
+          <div
+            class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 md:p-8"
+          >
+            <form id="join-form" class="space-y-6">
+              <div>
+                <label
+                  for="name"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Full Name</label
+                >
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
               </div>
-              <div class="mt-8 text-center">
+
+              <div>
+                <label
+                  for="age"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Age</label
+                >
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  min="16"
+                  max="40"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="role"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Playing Role</label
+                >
+                <select
+                  id="role"
+                  name="role"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="">Select your role</option>
+                  <option value="batsman">Batsman</option>
+                  <option value="bowler">Bowler</option>
+                  <option value="all-rounder">All-Rounder</option>
+                  <option value="wicketkeeper">Wicketkeeper-Batsman</option>
+                </select>
+              </div>
+
+              <div>
+                <label
+                  for="experience"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Years of Experience</label
+                >
+                <input
+                  type="number"
+                  id="experience"
+                  name="experience"
+                  min="0"
+                  max="20"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="contact"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Contact Number</label
+                >
+                <input
+                  type="tel"
+                  id="contact"
+                  name="contact"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="email"
+                  class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                  >Email Address</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+
+              <div>
                 <button
                   type="submit"
-                  class="btn-primary px-8 py-3 rounded-lg font-bold uppercase tracking-wider"
+                  class="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
                 >
                   Submit Application
                 </button>
@@ -1629,329 +551,574 @@
             </form>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- About Page -->
-      <div id="about-page" class="page-transition hidden">
-        <div class="container mx-auto py-16 px-4">
-          <h2 class="title-font text-4xl text-center text-red-600 mb-12">
-            ABOUT SPARTAN BOYZ
+      <section id="about" class="section py-12 hidden">
+        <div class="container mx-auto px-4">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 dark:text-white light:text-gray-800"
+          >
+            ABOUT US
           </h2>
 
-          <!-- Team History -->
-          <div class="max-w-4xl mx-auto mb-16">
-            <h3 class="title-font text-3xl text-red-600 mb-6">OUR HISTORY</h3>
-            <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-              <p class="mb-4">
-                Spartan Boyz Cricket Team was established in 2017 by a group of
-                cricket enthusiasts who wanted to create a competitive yet
-                inclusive platform for talented players. Starting as a local
-                club team, we quickly rose through the ranks with our
-                disciplined approach and never-say-die attitude.
-              </p>
-              <p class="mb-4">
-                Our first major breakthrough came in 2018 when we won the T20
-                Matches as underdogs, defeating established teams with our
-                innovative strategies and team spirit. This victory marked the
-                beginning of our journey to becoming one of the most respected
-                cricket teams in the region.
-              </p>
-              <p>
-                Today, Spartan Boyz competes in multiple formats and
-                tournaments, maintaining our core values of excellence,
-                integrity, and passion for the game. We've produced several
-                players who have gone on to represent state and national teams.
-              </p>
-            </div>
-          </div>
-
-          <!-- Achievements -->
-          <div class="max-w-4xl mx-auto mb-16">
-            <h3 class="title-font text-3xl text-red-600 mb-6">ACHIEVEMENTS</h3>
-            <div class="bg-gray-900 rounded-lg shadow-lg p-8">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h4 class="text-xl text-red-500 mb-3">Matches Wins</h4>
-                  <ul class="space-y-2">
-                    <li class="flex items-center">
-                      <i class="fas fa-trophy text-red-600 mr-2"></i> 01 Dec
-                      2024 - Vs KPF 11 - Won by 137 Runs
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-trophy text-red-600 mr-2"></i> 15 Dec
-                      2024 - Vs Young Stunners - Won by 8 Wickets
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-trophy text-red-600 mr-2"></i> 29 Dec
-                      2024 - Vs Power Hitters - Won by 83 Runs
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-trophy text-red-600 mr-2"></i> 2 Feb 2025
-                      - Vs Lahori Tigers - Won by 137 Runs
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-trophy text-red-600 mr-2"></i> 23 Feb
-                      2025 - Vs Lahori Tigers - Won by 7 Wickets
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 class="text-xl text-red-500 mb-3">Individual Honors</h4>
-                  <ul class="space-y-2">
-                    <li class="flex items-center">
-                      <i class="fas fa-medal text-red-600 mr-2"></i> 5 Players
-                      selected for State Team
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-medal text-red-600 mr-2"></i> 2 Players
-                      in National U-19 Squad
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-medal text-red-600 mr-2"></i> 3 "Player
-                      of the Tournament" awards
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-medal text-red-600 mr-2"></i> 12 "Man of
-                      the Match" awards in 2024
-                    </li>
-                    <li class="flex items-center">
-                      <i class="fas fa-medal text-red-600 mr-2"></i> Fastest
-                      Century record (21 balls)
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Match Highlights -->
           <div class="max-w-4xl mx-auto">
-            <h3 class="title-font text-3xl text-red-600 mb-6">
-              MATCH HIGHLIGHTS
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div
-                class="highlight-video bg-gray-900 rounded-lg shadow-lg overflow-hidden"
-              >
-                <div class="relative pb-[56.25%] bg-black">
-                  <div
-                    class="absolute inset-0 flex items-center justify-center"
-                  >
-                    <i class="fas fa-play text-red-600 text-4xl"></i>
-                  </div>
+            <!-- Team History -->
+            <div
+              class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+            >
+              <div class="md:flex">
+                <div class="md:w-1/3">
+                  <img
+                    src="https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Team History"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
-                <div class="p-4">
-                  <h4 class="text-xl mb-2">
-                    Spartan Boyz vs Lahori Tigers - 2025
-                  </h4>
-                  <p class="text-gray-400">
-                    Watch our thrilling last-over victory in the championship
-                    match.
+                <div class="p-6 md:w-2/3">
+                  <h3
+                    class="text-xl md:text-2xl font-bold mb-4 dark:text-white light:text-gray-800"
+                  >
+                    Team History
+                  </h3>
+                  <p class="dark:text-gray-300 light:text-gray-600 mb-4">
+                    Spartan Boyz was founded in 2010 by a group of passionate
+                    cricketers who wanted to create a team that would stand out
+                    not just for its performance but also for its values.
+                    Starting from humble beginnings in local tournaments, we've
+                    grown to become one of the most respected teams in the
+                    circuit.
+                  </p>
+                  <p class="dark:text-gray-300 light:text-gray-600">
+                    Our journey has been marked by perseverance, teamwork, and
+                    an unwavering commitment to excellence. From our first
+                    tournament win in 2012 to our recent championship in 2022,
+                    every milestone has been a testament to the hard work and
+                    dedication of our players and support staff.
                   </p>
                 </div>
               </div>
-              <div
-                class="highlight-video bg-gray-900 rounded-lg shadow-lg overflow-hidden"
-              >
-                <div class="relative pb-[56.25%] bg-black">
-                  <div
-                    class="absolute inset-0 flex items-center justify-center"
-                  >
-                    <i class="fas fa-play text-red-600 text-4xl"></i>
-                  </div>
+            </div>
+
+            <!-- Achievements -->
+            <div
+              class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+            >
+              <div class="md:flex flex-row-reverse">
+                <div class="md:w-1/3">
+                  <img
+                    src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+                    alt="Achievements"
+                    class="w-full h-full object-cover"
+                  />
                 </div>
-                <div class="p-4">
-                  <h4 class="text-xl mb-2">Hussnain's 21-balls Century</h4>
-                  <p class="text-gray-400">
-                    Record-breaking innings against GT 11.
-                  </p>
+                <div class="p-6 md:w-2/3">
+                  <h3
+                    class="text-xl md:text-2xl font-bold mb-4 dark:text-white light:text-gray-800"
+                  >
+                    Achievements
+                  </h3>
+                  <ul class="space-y-3 dark:text-gray-300 light:text-gray-600">
+                    <li class="flex items-start">
+                      <i class="fas fa-trophy text-purple-500 mt-1 mr-2"></i>
+                      <span>Champions - National T20 Tournament (2022)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-trophy text-purple-500 mt-1 mr-2"></i>
+                      <span>Runners-up - Inter-State Championship (2021)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-trophy text-purple-500 mt-1 mr-2"></i>
+                      <span>Fair Play Award - Premier League (2019, 2020)</span>
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-trophy text-purple-500 mt-1 mr-2"></i>
+                      <span
+                        >Best Emerging Team - Cricket Association Awards
+                        (2015)</span
+                      >
+                    </li>
+                    <li class="flex items-start">
+                      <i class="fas fa-trophy text-purple-500 mt-1 mr-2"></i>
+                      <span
+                        >3 players selected for National Camp (2018-2022)</span
+                      >
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <div
-                class="highlight-video bg-gray-900 rounded-lg shadow-lg overflow-hidden"
+            </div>
+
+            <!-- Match Highlights -->
+            <div
+              class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+            >
+              <h3
+                class="text-xl md:text-2xl font-bold p-6 dark:text-white light:text-gray-800"
               >
-                <div class="relative pb-[56.25%] bg-black">
-                  <div
-                    class="absolute inset-0 flex items-center justify-center"
-                  >
-                    <i class="fas fa-play text-red-600 text-4xl"></i>
+                Match Highlights
+              </h3>
+
+              <div class="border-t border-gray-200 dark:border-gray-700">
+                <!-- Highlight 1 -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                  <div class="flex justify-between items-center mb-2">
+                    <h4
+                      class="text-lg font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Spartan Boyz vs Thunder Strikers
+                    </h4>
+                    <span
+                      class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium px-2.5 py-0.5 rounded"
+                      >Final</span
+                    >
                   </div>
-                </div>
-                <div class="p-4">
-                  <h4 class="text-xl mb-2">Hammad's 5/38 Spell</h4>
-                  <p class="text-gray-400">
-                    Captain's devastating bowling performance against Power
-                    Hitters.
+                  <p class="dark:text-gray-300 light:text-gray-600 mb-3">
+                    National T20 Tournament - June 12, 2022
+                  </p>
+                  <div
+                    class="flex items-center text-sm dark:text-gray-400 light:text-gray-500"
+                  >
+                    <span class="mr-4">Spartan Boyz: 189/5 (20)</span>
+                    <span>Thunder Strikers: 175/8 (20)</span>
+                  </div>
+                  <p class="mt-3 dark:text-gray-300 light:text-gray-600">
+                    Jason Roy's explosive 78 off 42 balls and James Anderson's
+                    3/22 helped Spartan Boyz clinch their first national title
+                    in a thrilling final.
                   </p>
                 </div>
-              </div>
-              <div
-                class="highlight-video bg-gray-900 rounded-lg shadow-lg overflow-hidden"
-              >
-                <div class="relative pb-[56.25%] bg-black">
-                  <div
-                    class="absolute inset-0 flex items-center justify-center"
-                  >
-                    <i class="fas fa-play text-red-600 text-4xl"></i>
+
+                <!-- Highlight 2 -->
+                <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                  <div class="flex justify-between items-center mb-2">
+                    <h4
+                      class="text-lg font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Spartan Boyz vs Desert Warriors
+                    </h4>
+                    <span
+                      class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium px-2.5 py-0.5 rounded"
+                      >Semi-Final</span
+                    >
                   </div>
+                  <p class="dark:text-gray-300 light:text-gray-600 mb-3">
+                    Inter-State Championship - April 28, 2021
+                  </p>
+                  <div
+                    class="flex items-center text-sm dark:text-gray-400 light:text-gray-500"
+                  >
+                    <span class="mr-4">Desert Warriors: 210/7 (50)</span>
+                    <span>Spartan Boyz: 211/6 (48.3)</span>
+                  </div>
+                  <p class="mt-3 dark:text-gray-300 light:text-gray-600">
+                    A brilliant century by Ben Stokes (112*) guided Spartan Boyz
+                    to a memorable chase and a spot in the finals.
+                  </p>
                 </div>
-                <div class="p-4">
-                  <h4 class="text-xl mb-2">Team Fielding Highlights 2024</h4>
-                  <p class="text-gray-400">
-                    Best catches and run-outs from the season.
+
+                <!-- Highlight 3 -->
+                <div class="p-6">
+                  <div class="flex justify-between items-center mb-2">
+                    <h4
+                      class="text-lg font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Spartan Boyz vs Northern Knights
+                    </h4>
+                    <span
+                      class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs font-medium px-2.5 py-0.5 rounded"
+                      >Group Stage</span
+                    >
+                  </div>
+                  <p class="dark:text-gray-300 light:text-gray-600 mb-3">
+                    Premier League - August 15, 2020
+                  </p>
+                  <div
+                    class="flex items-center text-sm dark:text-gray-400 light:text-gray-500"
+                  >
+                    <span class="mr-4">Spartan Boyz: 325/8 (50)</span>
+                    <span>Northern Knights: 150 all out (32.1)</span>
+                  </div>
+                  <p class="mt-3 dark:text-gray-300 light:text-gray-600">
+                    A complete team performance with centuries from top order
+                    and a five-wicket haul by our spinners marked one of our
+                    most dominant victories.
                   </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Contact Us Page -->
-      <div id="contact-page" class="page-transition hidden">
-        <div class="container mx-auto py-16 px-4 max-w-4xl">
-          <h2 class="title-font text-4xl text-center text-red-600 mb-12">
+      <section id="contact" class="section py-12 hidden">
+        <div class="container mx-auto px-4">
+          <h2
+            class="text-2xl md:text-3xl font-bold text-center mb-8 dark:text-white light:text-gray-800"
+          >
             CONTACT US
           </h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <div class="bg-gray-900 rounded-lg shadow-lg p-8 h-full">
-                <h3 class="title-font text-2xl text-red-600 mb-6">
-                  SEND US A MESSAGE
-                </h3>
-                <form id="contact-form">
-                  <div class="mb-6">
-                    <label for="contact-name" class="block text-gray-400 mb-2"
-                      >Your Name</label
-                    >
-                    <input
-                      type="text"
-                      id="contact-name"
-                      name="name"
-                      class="w-full px-4 py-2 rounded focus:outline-none"
-                      required
-                    />
-                  </div>
-                  <div class="mb-6">
-                    <label for="contact-email" class="block text-gray-400 mb-2"
-                      >Your Email</label
-                    >
-                    <input
-                      type="email"
-                      id="contact-email"
-                      name="email"
-                      class="w-full px-4 py-2 rounded focus:outline-none"
-                      required
-                    />
-                  </div>
-                  <div class="mb-6">
-                    <label
-                      for="contact-message"
-                      class="block text-gray-400 mb-2"
-                      >Your Message</label
-                    >
-                    <textarea
-                      id="contact-message"
-                      name="message"
-                      rows="5"
-                      class="w-full px-4 py-2 rounded focus:outline-none"
-                      required
-                    ></textarea>
-                  </div>
-                  <div class="text-center">
-                    <button
-                      type="submit"
-                      class="btn-primary px-8 py-3 rounded-lg font-bold uppercase tracking-wider"
-                    >
-                      Send Message
-                    </button>
-                  </div>
-                </form>
-              </div>
+
+          <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Contact Form -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h3
+                class="text-xl font-bold mb-4 dark:text-white light:text-gray-800"
+              >
+                Send Us a Message
+              </h3>
+              <form id="contact-form" class="space-y-4">
+                <div>
+                  <label
+                    for="contact-name"
+                    class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                    >Name</label
+                  >
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="contact-email"
+                    class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    id="contact-email"
+                    name="email"
+                    required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    for="contact-message"
+                    class="block text-sm font-medium dark:text-gray-300 light:text-gray-700 mb-1"
+                    >Message</label
+                  >
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    rows="4"
+                    required
+                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  ></textarea>
+                </div>
+
+                <div>
+                  <button
+                    type="submit"
+                    class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+                  >
+                    Send Message
+                  </button>
+                </div>
+              </form>
             </div>
-            <div>
-              <div class="bg-gray-900 rounded-lg shadow-lg p-8 h-full">
-                <h3 class="title-font text-2xl text-red-600 mb-6">
-                  CONTACT INFORMATION
-                </h3>
-                <div class="space-y-6">
-                  <div class="flex items-start">
-                    <div class="bg-red-600 p-3 rounded-full mr-4">
-                      <i class="fas fa-map-marker-alt text-white"></i>
-                    </div>
-                    <div>
-                      <h4 class="text-lg font-bold mb-1">Club Address</h4>
-                      <p class="text-gray-400">
-                        Spartan Boyz Cricket Ground<br />
-                        Nadirabad <br />
-                        Lahore
-                      </p>
-                    </div>
+
+            <!-- Contact Info -->
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h3
+                class="text-xl font-bold mb-4 dark:text-white light:text-gray-800"
+              >
+                Contact Information
+              </h3>
+
+              <div class="space-y-4">
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-map-marker-alt text-purple-500"></i>
                   </div>
-                  <div class="flex items-start">
-                    <div class="bg-red-600 p-3 rounded-full mr-4">
-                      <i class="fas fa-phone-alt text-white"></i>
-                    </div>
-                    <div>
-                      <h4 class="text-lg font-bold mb-1">Phone</h4>
-                      <p class="text-gray-400">
-                        +92 3204734365 (Captain)<br />+92 3036934933 (Vice
-                        Captain)
-                      </p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-red-600 p-3 rounded-full mr-4">
-                      <i class="fas fa-envelope text-white"></i>
-                    </div>
-                    <div>
-                      <h4 class="text-lg font-bold mb-1">Email</h4>
-                      <p class="text-gray-400">
-                        info@spartanboyz.com<br />recruitment@spartanboyz.com
-                      </p>
-                    </div>
-                  </div>
-                  <div class="flex items-start">
-                    <div class="bg-red-600 p-3 rounded-full mr-4">
-                      <i class="fas fa-clock text-white"></i>
-                    </div>
-                    <div>
-                      <h4 class="text-lg font-bold mb-1">Office Hours</h4>
-                      <p class="text-gray-400">
-                        Monday - Friday: 9am - 5pm<br />Saturday: 10am - 2pm<br />Closed
-                        on match days
-                      </p>
-                    </div>
+                  <div class="ml-3">
+                    <h4
+                      class="text-sm font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Address
+                    </h4>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      Spartan Cricket Academy, Sports Complex, Cityville, 123456
+                    </p>
                   </div>
                 </div>
-                <div class="mt-8">
-                  <h4 class="text-lg font-bold mb-4">FOLLOW US</h4>
-                  <div class="flex space-x-4">
-                    <a
-                      href="#"
-                      class="bg-gray-800 hover:bg-red-600 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300"
-                    >
-                      <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="bg-gray-800 hover:bg-red-600 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300"
-                    >
-                      <i class="fab fa-twitter"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="bg-gray-800 hover:bg-red-600 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300"
-                    >
-                      <i class="fab fa-instagram"></i>
-                    </a>
-                    <a
-                      href="#"
-                      class="bg-gray-800 hover:bg-red-600 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300"
-                    >
-                      <i class="fab fa-youtube"></i>
-                    </a>
+
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-phone-alt text-purple-500"></i>
                   </div>
+                  <div class="ml-3">
+                    <h4
+                      class="text-sm font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Phone
+                    </h4>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      +1 (234) 567-8900
+                    </p>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      +1 (234) 567-8901 (Admin)
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-envelope text-purple-500"></i>
+                  </div>
+                  <div class="ml-3">
+                    <h4
+                      class="text-sm font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Email
+                    </h4>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      info@spartanboyz.com
+                    </p>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      support@spartanboyz.com
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <i class="fas fa-clock text-purple-500"></i>
+                  </div>
+                  <div class="ml-3">
+                    <h4
+                      class="text-sm font-semibold dark:text-white light:text-gray-800"
+                    >
+                      Office Hours
+                    </h4>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      Monday - Friday: 9:00 AM - 5:00 PM
+                    </p>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      Saturday: 10:00 AM - 2:00 PM
+                    </p>
+                    <p class="text-sm dark:text-gray-300 light:text-gray-600">
+                      Sunday: Closed
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <h4
+                  class="text-sm font-semibold mb-2 dark:text-white light:text-gray-800"
+                >
+                  Follow Us
+                </h4>
+                <div class="flex space-x-4">
+                  <a href="#" class="text-purple-500 hover:text-purple-700">
+                    <i class="fab fa-facebook-f text-xl"></i>
+                  </a>
+                  <a href="#" class="text-purple-500 hover:text-purple-700">
+                    <i class="fab fa-twitter text-xl"></i>
+                  </a>
+                  <a href="#" class="text-purple-500 hover:text-purple-700">
+                    <i class="fab fa-instagram text-xl"></i>
+                  </a>
+                  <a href="#" class="text-purple-500 hover:text-purple-700">
+                    <i class="fab fa-youtube text-xl"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-purple-900 dark:bg-gray-900 text-white py-8">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-lg font-bold mb-4">SPARTAN BOYZ</h3>
+            <p class="text-sm">
+              Unleash the Warrior Within. A premier cricket team dedicated to
+              excellence, sportsmanship, and the spirit of the game.
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#home" class="hover:text-purple-300 transition"
+                  >Home</a
+                >
+              </li>
+              <li>
+                <a href="#stats" class="hover:text-purple-300 transition"
+                  >Player Stats</a
+                >
+              </li>
+              <li>
+                <a href="#join" class="hover:text-purple-300 transition"
+                  >Join Our Team</a
+                >
+              </li>
+              <li>
+                <a href="#about" class="hover:text-purple-300 transition"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a href="#contact" class="hover:text-purple-300 transition"
+                  >Contact</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Contact Info</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="fas fa-map-marker-alt mt-1 mr-2"></i>
+                <span>Spartan Cricket Academy, Cityville</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-phone-alt mt-1 mr-2"></i>
+                <span>+1 (234) 567-8900</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-envelope mt-1 mr-2"></i>
+                <span>info@spartanboyz.com</span>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+            <p class="text-sm mb-4">
+              Subscribe to our newsletter for the latest updates, match
+              schedules, and team news.
+            </p>
+            <form class="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                class="px-3 py-2 text-gray-800 rounded-l focus:outline-none w-full"
+              />
+              <button
+                type="submit"
+                class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-r"
+              >
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-purple-800 dark:border-gray-800 mt-8 pt-6 text-center text-sm"
+        >
+          <p>&copy; 2023 Spartan Boyz Cricket Team. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Player Modal -->
+    <div
+      id="player-modal"
+      class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none"
+    >
+      <div
+        class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform translate-y-10"
+      >
+        <div class="relative">
+          <!-- Close Button -->
+          <button
+            id="close-modal"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+          >
+            <i class="fas fa-times text-2xl"></i>
+          </button>
+
+          <!-- Modal Content -->
+          <div class="p-6">
+            <div class="flex flex-col md:flex-row items-center mb-6">
+              <img
+                id="modal-player-img"
+                src=""
+                alt="Player"
+                class="w-32 h-32 md:w-48 md:h-48 rounded-full object-cover border-4 border-purple-500"
+              />
+              <div class="mt-4 md:mt-0 md:ml-6 text-center md:text-left">
+                <h2
+                  id="modal-player-name"
+                  class="text-2xl md:text-3xl font-bold dark:text-white light:text-gray-800"
+                ></h2>
+                <p id="modal-player-role" class="text-purple-500 text-lg"></p>
+                <div
+                  class="flex justify-center md:justify-start space-x-4 mt-2"
+                >
+                  <div>
+                    <span
+                      class="block text-sm dark:text-gray-400 light:text-gray-600"
+                      >Matches</span
+                    >
+                    <span id="modal-player-matches" class="font-bold"></span>
+                  </div>
+                  <div>
+                    <span
+                      class="block text-sm dark:text-gray-400 light:text-gray-600"
+                      >Runs</span
+                    >
+                    <span id="modal-player-runs" class="font-bold"></span>
+                  </div>
+                  <div>
+                    <span
+                      class="block text-sm dark:text-gray-400 light:text-gray-600"
+                      >Wickets</span
+                    >
+                    <span id="modal-player-wickets" class="font-bold"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- Batting Stats -->
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                <h3
+                  class="text-lg font-bold mb-4 dark:text-white light:text-gray-800"
+                >
+                  Batting Statistics
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full">
+                    <tbody id="batting-stats">
+                      <!-- Batting stats will be populated here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Bowling Stats -->
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">
+                <h3
+                  class="text-lg font-bold mb-4 dark:text-white light:text-gray-800"
+                >
+                  Bowling Statistics
+                </h3>
+                <div class="overflow-x-auto">
+                  <table class="min-w-full">
+                    <tbody id="bowling-stats">
+                      <!-- Bowling stats will be populated here -->
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -1960,175 +1127,710 @@
       </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-black py-12">
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <div class="flex items-center mb-4">
-              <div
-                class="cricket-ball w-8 h-8 rounded-full bg-red-600 flex items-center justify-center mr-3"
-              >
-                <div class="w-2 h-2 bg-white rounded-full"></div>
-              </div>
-              <h3 class="title-font text-2xl text-red-600">SPARTAN BOYZ</h3>
-            </div>
-            <p class="text-gray-400">
-              A premier cricket team playing with passion, discipline, and
-              sportsmanship since 2017.
-            </p>
+    <!-- Success Modal -->
+    <div
+      id="success-modal"
+      class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none"
+    >
+      <div
+        class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4 p-6 transform translate-y-10"
+      >
+        <div class="text-center">
+          <div
+            class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <i
+              class="fas fa-check text-green-500 dark:text-green-300 text-2xl"
+            ></i>
           </div>
-          <div>
-            <h4 class="title-font text-xl text-white mb-4">QUICK LINKS</h4>
-            <ul class="space-y-2">
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-red-600"
-                  onclick="showPage('home')"
-                  >Home</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-red-600"
-                  onclick="showPage('stats')"
-                  >Player Stats</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-red-600"
-                  onclick="showPage('join')"
-                  >Join Our Team</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-red-600"
-                  onclick="showPage('about')"
-                  >About</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-gray-400 hover:text-red-600"
-                  onclick="showPage('contact')"
-                  >Contact</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="title-font text-xl text-white mb-4">NEWSLETTER</h4>
-            <p class="text-gray-400 mb-4">
-              Subscribe for match schedules, team news, and exclusive content.
-            </p>
-            <form class="flex">
-              <input
-                type="email"
-                placeholder="Your email"
-                class="px-4 py-2 rounded-l focus:outline-none bg-gray-800 text-white w-full"
-              />
-              <button
-                type="submit"
-                class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-r"
-              >
-                <i class="fas fa-paper-plane"></i>
-              </button>
-            </form>
-          </div>
-          <div>
-            <h4 class="title-font text-xl text-white mb-4">MATCH SCHEDULE</h4>
-            <div class="text-gray-400 space-y-2">
-              <p>Next Match: vs Power Hitters</p>
-              <p>Date: May 25, 2025</p>
-              <p>Venue: Phase 6</p>
-              <p>Time: 07:00 AM</p>
-            </div>
-          </div>
-        </div>
-        <div
-          class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400"
-        >
-          <p>&copy; 2023 Spartan Boyz Cricket Team. All rights reserved.</p>
+          <h3
+            class="text-xl font-bold mb-2 dark:text-white light:text-gray-800"
+          >
+            Success!
+          </h3>
+          <p
+            id="success-message"
+            class="dark:text-gray-300 light:text-gray-600 mb-6"
+          ></p>
+          <button
+            id="close-success-modal"
+            class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300"
+          >
+            Close
+          </button>
         </div>
       </div>
-    </footer>
+    </div>
 
     <script>
-      // Mobile menu toggle
-      document
-        .getElementById("mobile-menu-button")
-        .addEventListener("click", function () {
-          const menu = document.getElementById("mobile-menu");
-          menu.classList.toggle("hidden");
-        });
+      // Player data
+      const players = [
+        {
+          id: 1,
+          name: "Jason Roy",
+          role: "Opening Batsman",
+          image: "https://randomuser.me/api/portraits/men/32.jpg",
+          matches: 142,
+          runs: 5678,
+          wickets: 2,
+          batting: {
+            matches: 142,
+            runs: 5678,
+            average: 42.5,
+            strikeRate: 132.4,
+            best: "145*",
+            fifties: 28,
+            hundreds: 12,
+            notOuts: 15,
+            fours: 542,
+            sixes: 128,
+          },
+          bowling: {
+            matches: 142,
+            wickets: 2,
+            average: 125.0,
+            economy: 7.2,
+            best: "1/12",
+            maidens: 0,
+            threeWickets: 0,
+            fiveWickets: 0,
+          },
+        },
+        {
+          id: 2,
+          name: "James Anderson",
+          role: "Fast Bowler",
+          image: "https://randomuser.me/api/portraits/men/44.jpg",
+          matches: 178,
+          runs: 892,
+          wickets: 634,
+          batting: {
+            matches: 178,
+            runs: 892,
+            average: 8.7,
+            strikeRate: 52.3,
+            best: "47",
+            fifties: 0,
+            hundreds: 0,
+            notOuts: 22,
+            fours: 112,
+            sixes: 3,
+          },
+          bowling: {
+            matches: 178,
+            wickets: 634,
+            average: 26.2,
+            economy: 2.9,
+            best: "7/42",
+            maidens: 145,
+            threeWickets: 48,
+            fiveWickets: 28,
+          },
+        },
+        {
+          id: 3,
+          name: "Ben Stokes",
+          role: "All-Rounder",
+          image: "https://randomuser.me/api/portraits/men/67.jpg",
+          matches: 165,
+          runs: 4892,
+          wickets: 194,
+          batting: {
+            matches: 165,
+            runs: 4892,
+            average: 36.8,
+            strikeRate: 118.7,
+            best: "156",
+            fifties: 25,
+            hundreds: 8,
+            notOuts: 12,
+            fours: 432,
+            sixes: 98,
+          },
+          bowling: {
+            matches: 165,
+            wickets: 194,
+            average: 31.5,
+            economy: 5.2,
+            best: "6/22",
+            maidens: 12,
+            threeWickets: 15,
+            fiveWickets: 4,
+          },
+        },
+        {
+          id: 4,
+          name: "Joe Root",
+          role: "Top Order Batsman",
+          image: "https://randomuser.me/api/portraits/men/22.jpg",
+          matches: 158,
+          runs: 7234,
+          wickets: 42,
+          batting: {
+            matches: 158,
+            runs: 7234,
+            average: 51.3,
+            strikeRate: 88.6,
+            best: "254",
+            fifties: 42,
+            hundreds: 18,
+            notOuts: 23,
+            fours: 678,
+            sixes: 32,
+          },
+          bowling: {
+            matches: 158,
+            wickets: 42,
+            average: 45.2,
+            economy: 3.8,
+            best: "4/25",
+            maidens: 8,
+            threeWickets: 3,
+            fiveWickets: 0,
+          },
+        },
+        {
+          id: 5,
+          name: "Jofra Archer",
+          role: "Fast Bowler",
+          image: "https://randomuser.me/api/portraits/men/55.jpg",
+          matches: 86,
+          runs: 432,
+          wickets: 167,
+          batting: {
+            matches: 86,
+            runs: 432,
+            average: 12.3,
+            strikeRate: 92.5,
+            best: "38*",
+            fifties: 0,
+            hundreds: 0,
+            notOuts: 15,
+            fours: 42,
+            sixes: 18,
+          },
+          bowling: {
+            matches: 86,
+            wickets: 167,
+            average: 24.8,
+            economy: 4.9,
+            best: "6/40",
+            maidens: 23,
+            threeWickets: 12,
+            fiveWickets: 5,
+          },
+        },
+        {
+          id: 6,
+          name: "Jos Buttler",
+          role: "Wicketkeeper-Batsman",
+          image: "https://randomuser.me/api/portraits/men/76.jpg",
+          matches: 192,
+          runs: 6543,
+          wickets: 0,
+          batting: {
+            matches: 192,
+            runs: 6543,
+            average: 38.9,
+            strikeRate: 142.7,
+            best: "167*",
+            fifties: 35,
+            hundreds: 14,
+            notOuts: 28,
+            fours: 612,
+            sixes: 198,
+          },
+          bowling: {
+            matches: 192,
+            wickets: 0,
+            average: 0,
+            economy: 0,
+            best: "0/0",
+            maidens: 0,
+            threeWickets: 0,
+            fiveWickets: 0,
+          },
+        },
+        {
+          id: 7,
+          name: "Rashid Khan",
+          role: "Spin Bowler",
+          image: "https://randomuser.me/api/portraits/men/88.jpg",
+          matches: 134,
+          runs: 876,
+          wickets: 278,
+          batting: {
+            matches: 134,
+            runs: 876,
+            average: 14.6,
+            strikeRate: 112.4,
+            best: "52*",
+            fifties: 1,
+            hundreds: 0,
+            notOuts: 18,
+            fours: 78,
+            sixes: 32,
+          },
+          bowling: {
+            matches: 134,
+            wickets: 278,
+            average: 18.9,
+            economy: 4.2,
+            best: "7/18",
+            maidens: 42,
+            threeWickets: 32,
+            fiveWickets: 12,
+          },
+        },
+        {
+          id: 8,
+          name: "Virat Kohli",
+          role: "Top Order Batsman",
+          image: "https://randomuser.me/api/portraits/men/12.jpg",
+          matches: 254,
+          runs: 12123,
+          wickets: 8,
+          batting: {
+            matches: 254,
+            runs: 12123,
+            average: 59.4,
+            strikeRate: 93.2,
+            best: "254*",
+            fifties: 65,
+            hundreds: 43,
+            notOuts: 32,
+            fours: 1123,
+            sixes: 145,
+          },
+          bowling: {
+            matches: 254,
+            wickets: 8,
+            average: 112.5,
+            economy: 6.2,
+            best: "1/7",
+            maidens: 0,
+            threeWickets: 0,
+            fiveWickets: 0,
+          },
+        },
+        {
+          id: 9,
+          name: "Kagiso Rabada",
+          role: "Fast Bowler",
+          image: "https://randomuser.me/api/portraits/men/33.jpg",
+          matches: 112,
+          runs: 543,
+          wickets: 245,
+          batting: {
+            matches: 112,
+            runs: 543,
+            average: 11.3,
+            strikeRate: 72.4,
+            best: "34",
+            fifties: 0,
+            hundreds: 0,
+            notOuts: 15,
+            fours: 62,
+            sixes: 12,
+          },
+          bowling: {
+            matches: 112,
+            wickets: 245,
+            average: 22.7,
+            economy: 4.8,
+            best: "7/56",
+            maidens: 32,
+            threeWickets: 18,
+            fiveWickets: 9,
+          },
+        },
+        {
+          id: 10,
+          name: "Kane Williamson",
+          role: "Top Order Batsman",
+          image: "https://randomuser.me/api/portraits/men/45.jpg",
+          matches: 198,
+          runs: 8765,
+          wickets: 42,
+          batting: {
+            matches: 198,
+            runs: 8765,
+            average: 54.1,
+            strikeRate: 82.3,
+            best: "242*",
+            fifties: 48,
+            hundreds: 28,
+            notOuts: 25,
+            fours: 876,
+            sixes: 65,
+          },
+          bowling: {
+            matches: 198,
+            wickets: 42,
+            average: 38.7,
+            economy: 3.9,
+            best: "4/22",
+            maidens: 12,
+            threeWickets: 5,
+            fiveWickets: 0,
+          },
+        },
+        {
+          id: 11,
+          name: "Trent Boult",
+          role: "Fast Bowler",
+          image: "https://randomuser.me/api/portraits/men/77.jpg",
+          matches: 145,
+          runs: 432,
+          wickets: 287,
+          batting: {
+            matches: 145,
+            runs: 432,
+            average: 9.8,
+            strikeRate: 68.7,
+            best: "28",
+            fifties: 0,
+            hundreds: 0,
+            notOuts: 12,
+            fours: 45,
+            sixes: 8,
+          },
+          bowling: {
+            matches: 145,
+            wickets: 287,
+            average: 25.4,
+            economy: 4.7,
+            best: "7/34",
+            maidens: 38,
+            threeWickets: 22,
+            fiveWickets: 8,
+          },
+        },
+      ];
 
-      // Page navigation
-      function showPage(pageId) {
-        // Hide all pages
-        document.querySelectorAll('[id$="-page"]').forEach((page) => {
-          page.classList.add("hidden");
-        });
-
-        // Show selected page
-        document.getElementById(`${pageId}-page`).classList.remove("hidden");
-
-        // Close mobile menu if open
-        document.getElementById("mobile-menu").classList.add("hidden");
-
-        // Scroll to top
-        window.scrollTo(0, 0);
-
-        // Generate player cards if on stats page
-        if (pageId === "stats") {
-          generatePlayerCards();
-        }
-      }
-
-      // Form submissions
-      document
-        .getElementById("join-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          alert(
-            "Thank you for your application! We will review it and get back to you soon."
-          );
-          this.reset();
-        });
-
-      document
-        .getElementById("contact-form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          alert(
-            "Thank you for your message! We will respond as soon as possible."
-          );
-          this.reset();
-        });
+      // DOM Elements
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const toggle = document.getElementById("toggle");
+      const toggleMobile = document.getElementById("toggle-mobile");
+      const body = document.body;
+      const navLinks = document.querySelectorAll(".nav-link");
+      const sections = document.querySelectorAll(".section");
+      const playerStatsSection = document.getElementById("stats");
+      const playerCardsContainer = playerStatsSection.querySelector(".grid");
+      const playerModal = document.getElementById("player-modal");
+      const closeModal = document.getElementById("close-modal");
+      const modalPlayerImg = document.getElementById("modal-player-img");
+      const modalPlayerName = document.getElementById("modal-player-name");
+      const modalPlayerRole = document.getElementById("modal-player-role");
+      const modalPlayerMatches = document.getElementById(
+        "modal-player-matches"
+      );
+      const modalPlayerRuns = document.getElementById("modal-player-runs");
+      const modalPlayerWickets = document.getElementById(
+        "modal-player-wickets"
+      );
+      const battingStats = document.getElementById("batting-stats");
+      const bowlingStats = document.getElementById("bowling-stats");
+      const joinForm = document.getElementById("join-form");
+      const contactForm = document.getElementById("contact-form");
+      const successModal = document.getElementById("success-modal");
+      const closeSuccessModal = document.getElementById("close-success-modal");
+      const successMessage = document.getElementById("success-message");
 
       // Initialize the page
       document.addEventListener("DOMContentLoaded", function () {
-        // Show home page by default
-        showPage("home");
+        // Generate player cards for stats page
+        generatePlayerCards();
 
-        // Animate stats bars on home page
-        setTimeout(() => {
-          const progressBars = document.querySelectorAll(".stats-progress");
-          progressBars.forEach((bar) => {
-            const width = bar.style.width;
-            bar.style.width = "0";
-            setTimeout(() => {
-              bar.style.width = width;
-            }, 100);
-          });
-        }, 500);
+        // Set up event listeners
+        setupEventListeners();
+
+        // Show home section by default
+        showSection("home");
+
+        // Check for prefers-color-scheme
+        if (
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches
+        ) {
+          toggle.checked = true;
+          toggleMobile.checked = true;
+          body.classList.remove("dark");
+          body.classList.add("light");
+        }
       });
+
+      // Generate player cards for stats page
+      function generatePlayerCards() {
+        players.forEach((player) => {
+          const card = document.createElement("div");
+          card.className = "player-card";
+          card.innerHTML = `
+                    <div class="player-card-inner bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg card-hover cursor-pointer" data-id="${player.id}">
+                        <div class="relative">
+                            <img src="${player.image}" alt="${player.name}" class="w-full h-64 object-cover">
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                                <h3 class="text-xl font-bold text-white">${player.name}</h3>
+                                <p class="text-purple-300">${player.role}</p>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600 dark:text-gray-300">Matches</span>
+                                <span class="font-bold">${player.matches}</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-600 dark:text-gray-300">Runs</span>
+                                <span class="font-bold">${player.runs}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-300">Wickets</span>
+                                <span class="font-bold">${player.wickets}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+          card.addEventListener("click", () => showPlayerModal(player.id));
+          playerCardsContainer.appendChild(card);
+        });
+      }
+
+      // Show player modal with detailed stats
+      function showPlayerModal(playerId) {
+        const player = players.find((p) => p.id === playerId);
+        if (!player) return;
+
+        // Set player info
+        modalPlayerImg.src = player.image;
+        modalPlayerImg.alt = player.name;
+        modalPlayerName.textContent = player.name;
+        modalPlayerRole.textContent = player.role;
+        modalPlayerMatches.textContent = player.matches;
+        modalPlayerRuns.textContent = player.runs;
+        modalPlayerWickets.textContent = player.wickets;
+
+        // Set batting stats
+        battingStats.innerHTML = `
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Matches</td>
+                    <td class="py-2 font-bold">${player.batting.matches}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Runs</td>
+                    <td class="py-2 font-bold">${player.batting.runs}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Average</td>
+                    <td class="py-2 font-bold">${player.batting.average}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Strike Rate</td>
+                    <td class="py-2 font-bold">${player.batting.strikeRate}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Best</td>
+                    <td class="py-2 font-bold">${player.batting.best}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">50s</td>
+                    <td class="py-2 font-bold">${player.batting.fifties}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">100s</td>
+                    <td class="py-2 font-bold">${player.batting.hundreds}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Not Outs</td>
+                    <td class="py-2 font-bold">${player.batting.notOuts}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">4s</td>
+                    <td class="py-2 font-bold">${player.batting.fours}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">6s</td>
+                    <td class="py-2 font-bold">${player.batting.sixes}</td>
+                </tr>
+            `;
+
+        // Set bowling stats
+        bowlingStats.innerHTML = `
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Matches</td>
+                    <td class="py-2 font-bold">${player.bowling.matches}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Wickets</td>
+                    <td class="py-2 font-bold">${player.bowling.wickets}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Average</td>
+                    <td class="py-2 font-bold">${player.bowling.average}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Economy</td>
+                    <td class="py-2 font-bold">${player.bowling.economy}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Best</td>
+                    <td class="py-2 font-bold">${player.bowling.best}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">Maidens</td>
+                    <td class="py-2 font-bold">${player.bowling.maidens}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">3 Wickets</td>
+                    <td class="py-2 font-bold">${player.bowling.threeWickets}</td>
+                </tr>
+                <tr>
+                    <td class="py-2 pr-4 text-gray-600 dark:text-gray-300">5 Wickets</td>
+                    <td class="py-2 font-bold">${player.bowling.fiveWickets}</td>
+                </tr>
+            `;
+
+        // Show modal
+        playerModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      // Show success modal
+      function showSuccessModal(message) {
+        successMessage.textContent = message;
+        successModal.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      // Show section based on hash
+      function showSection(sectionId) {
+        sections.forEach((section) => {
+          if (section.id === sectionId) {
+            section.classList.remove("hidden");
+            setTimeout(() => {
+              section.classList.add("visible");
+            }, 50);
+          } else {
+            section.classList.add("hidden");
+            section.classList.remove("visible");
+          }
+        });
+
+        // Update active nav link
+        navLinks.forEach((link) => {
+          if (link.getAttribute("href") === `#${sectionId}`) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+
+      // Set up event listeners
+      function setupEventListeners() {
+        // Mobile menu toggle
+        mobileMenuButton.addEventListener("click", () => {
+          mobileMenu.classList.toggle("hidden");
+        });
+
+        // Dark/light mode toggle
+        toggle.addEventListener("change", () => {
+          if (toggle.checked) {
+            body.classList.remove("dark");
+            body.classList.add("light");
+            toggleMobile.checked = true;
+          } else {
+            body.classList.remove("light");
+            body.classList.add("dark");
+            toggleMobile.checked = false;
+          }
+        });
+
+        // Mobile dark/light mode toggle
+        toggleMobile.addEventListener("change", () => {
+          if (toggleMobile.checked) {
+            body.classList.remove("dark");
+            body.classList.add("light");
+            toggle.checked = true;
+          } else {
+            body.classList.remove("light");
+            body.classList.add("dark");
+            toggle.checked = false;
+          }
+        });
+
+        // Navigation links
+        navLinks.forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const sectionId = link.getAttribute("href").substring(1);
+            showSection(sectionId);
+
+            // Close mobile menu if open
+            mobileMenu.classList.add("hidden");
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+          });
+        });
+
+        // Close modal
+        closeModal.addEventListener("click", () => {
+          playerModal.classList.remove("active");
+          document.body.style.overflow = "auto";
+        });
+
+        // Close success modal
+        closeSuccessModal.addEventListener("click", () => {
+          successModal.classList.remove("active");
+          document.body.style.overflow = "auto";
+        });
+
+        // Join form submission
+        joinForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          // In a real app, you would send this data to a server
+          showSuccessModal(
+            "Your application has been submitted successfully! We will review your details and get back to you soon."
+          );
+          joinForm.reset();
+        });
+
+        // Contact form submission
+        contactForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          // In a real app, you would send this data to a server
+          showSuccessModal(
+            "Thank you for your message! We will get back to you as soon as possible."
+          );
+          contactForm.reset();
+        });
+
+        // Hash change (for direct links)
+        window.addEventListener("hashchange", () => {
+          const sectionId = window.location.hash.substring(1);
+          if (sectionId) {
+            showSection(sectionId);
+          }
+        });
+
+        // Intersection Observer for section animations
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        sections.forEach((section) => {
+          observer.observe(section);
+        });
+      }
     </script>
   </body>
 </html>
